@@ -65,9 +65,13 @@ class _SingleTimerState extends State<SingleTimer> {
     });
   }
 
-  void setTimer(int seconds) {
+  void setTimer(int seconds, [bool start = false]) {
     setState(() {
       _initialSeconds = seconds;
+      _seconds = seconds;
+      if (start) {
+        startTimer();
+      }
     });
   }
 
