@@ -4,6 +4,8 @@ import 'package:trill/app_state.dart';
 import 'package:trill/time_entry.dart';
 import 'package:trill/time_string.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_mesh_gradient/animated_mesh_gradient.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class SingleTimer extends StatefulWidget {
   const SingleTimer({super.key});
@@ -17,11 +19,20 @@ class _SingleTimerState extends State<SingleTimer> {
   int _initialSeconds = 0;
   int _seconds = 0;
   bool _isRunning = false;
+  bool _isFinished = false;
+
+  final _player = AudioPlayer();
 
   @override
   void dispose() {
     _timer?.cancel();
+    _player.dispose();
     super.dispose();
+  }
+
+  void playAlarm() async {
+    await _player.setReleaseMode(ReleaseMode.loop);
+    await _player.play(AssetSource('data-scanner.wav'));
   }
 
   Timer timerFactory() {
@@ -30,6 +41,10 @@ class _SingleTimerState extends State<SingleTimer> {
       return Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
           _seconds--;
+          if (_seconds == 0) {
+            playAlarm();
+            _isFinished = true;
+          }
         });
       });
     } else {
@@ -96,57 +111,73 @@ class _SingleTimerState extends State<SingleTimer> {
       color: theme.colorScheme.onPrimary,
     );
 
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(secondsToTimeString(_seconds), style: timeTextStyle),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: gotoTimeEntry,
-                  child: Text(
-                    secondsToTimeString(_initialSeconds),
-                    style: initialTimeTextStyle,
-                  ),
+    Widget InnerUI = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(secondsToTimeString(_seconds), style: timeTextStyle),
+          Row(
+            children: [
+              OutlinedButton(
+                onPressed: gotoTimeEntry,
+                child: Text(
+                  secondsToTimeString(_initialSeconds),
+                  style: initialTimeTextStyle,
                 ),
-                _isRunning
-                    ? IconButton(
-                        icon: const Icon(Icons.pause),
-                        color: theme.colorScheme.onPrimary,
-                        onPressed: () {
-                          pauseTimer();
-                        },
-                      )
-                    : IconButton(
-                        icon: const Icon(Icons.play_arrow),
-                        color: theme.colorScheme.onPrimary,
-                        onPressed: () {
-                          startTimer();
-                        },
-                      ),
-                IconButton(
-                  icon: const Icon(Icons.replay),
-                  color: theme.colorScheme.onPrimary,
-                  onPressed: () {
-                    resetTimer();
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  color: theme.colorScheme.onPrimary,
-                  onPressed: () {
-                    appState.removeTimer(widget.key!);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              _isRunning
+                  ? IconButton(
+                      icon: const Icon(Icons.pause),
+                      color: theme.colorScheme.onPrimary,
+                      onPressed: () {
+                        pauseTimer();
+                      },
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.play_arrow),
+                      color: theme.colorScheme.onPrimary,
+                      onPressed: () {
+                        startTimer();
+                      },
+                    ),
+              IconButton(
+                icon: const Icon(Icons.replay),
+                color: theme.colorScheme.onPrimary,
+                onPressed: () {
+                  resetTimer();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                color: theme.colorScheme.onPrimary,
+                onPressed: () {
+                  appState.removeTimer(widget.key!);
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
+
+    return _isFinished
+        ? InkWell(
+            onTap: () {
+              _player.stop();
+              setState(() {
+                _isFinished = false;
+              });
+            },
+            child: Card(
+              color: theme.colorScheme.primary,
+              child: AnimatedMeshGradient(
+                colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
+                options: AnimatedMeshGradientOptions(),
+                child: InnerUI,
+              ),
+            ),
+          )
+        : Card(color: theme.colorScheme.primary, child: InnerUI);
   }
 }
