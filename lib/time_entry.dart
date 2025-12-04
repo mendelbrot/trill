@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trill/time_string.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class TimeEntry extends StatefulWidget {
   final Function onSubmit;
@@ -31,7 +32,7 @@ class _TimeEntryState extends State<TimeEntry> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('set timer'),
+        title: Text('Set the timer'),
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
@@ -41,10 +42,102 @@ class _TimeEntryState extends State<TimeEntry> {
       ),
       body: Column(
         children: [
-          Row(children: [Text(secondsToTimeString(_initialSeconds))]),
-          Row(
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 1,
+            childAspectRatio: 4,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              ElevatedButton(
+              Container(
+                decoration: BoxDecoration(
+                  // 2. Define the border
+                  border: Border.all(
+                    color: Colors.black, // The color of the border
+                    width: 1.0, // The thickness of the border
+                  ),
+                  // Optional: Add a rounded corner radius
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: FittedBox(
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain, // or BoxFit.fill to stretch/distort
+                  child: Text(
+                    secondsToTimeString(_initialSeconds),
+                    style: TextStyle(
+                      fontFamily: 'monospace',
+                      // fontSize: 72.0,
+                      // fontWeight: FontWeight.bold,
+                      // color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 4,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            padding: EdgeInsets.all(10.0),
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
+                child: Text("+5s"),
+                onPressed: () {
+                  setState(() {
+                    _initialSeconds += 5;
+                  });
+                },
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
+                child: Text("+10s"),
+                onPressed: () {
+                  setState(() {
+                    _initialSeconds += 10;
+                  });
+                },
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
+                child: Text("+30s"),
+                onPressed: () {
+                  setState(() {
+                    _initialSeconds += 30;
+                  });
+                },
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("+1m"),
                 onPressed: () {
                   setState(() {
@@ -52,23 +145,14 @@ class _TimeEntryState extends State<TimeEntry> {
                   });
                 },
               ),
-              ElevatedButton(
-                child: Text("+2m"),
-                onPressed: () {
-                  setState(() {
-                    _initialSeconds += 120;
-                  });
-                },
-              ),
-              ElevatedButton(
-                child: Text("+3m"),
-                onPressed: () {
-                  setState(() {
-                    _initialSeconds += 180;
-                  });
-                },
-              ),
-              ElevatedButton(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("+5m"),
                 onPressed: () {
                   setState(() {
@@ -76,11 +160,14 @@ class _TimeEntryState extends State<TimeEntry> {
                   });
                 },
               ),
-            ],
-          ),
-          Row(
-            children: [
-              ElevatedButton(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("+10m"),
                 onPressed: () {
                   setState(() {
@@ -88,15 +175,14 @@ class _TimeEntryState extends State<TimeEntry> {
                   });
                 },
               ),
-              ElevatedButton(
-                child: Text("+15m"),
-                onPressed: () {
-                  setState(() {
-                    _initialSeconds += 900;
-                  });
-                },
-              ),
-              ElevatedButton(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("+30m"),
                 onPressed: () {
                   setState(() {
@@ -104,7 +190,14 @@ class _TimeEntryState extends State<TimeEntry> {
                   });
                 },
               ),
-              ElevatedButton(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("+1h"),
                 onPressed: () {
                   setState(() {
@@ -114,25 +207,39 @@ class _TimeEntryState extends State<TimeEntry> {
               ),
             ],
           ),
-          Row(
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            childAspectRatio: 2,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              ElevatedButton(
-                child: Text("Clear"),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
+                child: Text("Zero"),
                 onPressed: () {
                   setState(() {
                     _initialSeconds = 0;
                   });
                 },
               ),
-              ElevatedButton(
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  // side: BorderSide(color: Colors.blue, width: 1.5),
+                ),
                 child: Text("Set"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  widget.onSubmit(_initialSeconds);
-                },
-              ),
-              ElevatedButton(
-                child: Text("Set & Start"),
                 onPressed: () {
                   Navigator.of(context).pop();
                   widget.onSubmit(_initialSeconds, true);

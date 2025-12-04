@@ -22,5 +22,3 @@ class HomeStack extends StatelessWidget {
     );
   }
 }
-
-
