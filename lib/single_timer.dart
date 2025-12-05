@@ -129,7 +129,12 @@ class _SingleTimerState extends State<SingleTimer> {
                 padding: const EdgeInsets.only(left: 10, bottom: 10),
                 child: Row(
                   children: [
-                    Expanded(child: TimeDisplay(seconds: _initialSeconds)),
+                    Expanded(
+                      child: TimeDisplay(
+                        seconds: _initialSeconds,
+                        absolute: true,
+                      ),
+                    ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -137,19 +142,23 @@ class _SingleTimerState extends State<SingleTimer> {
                           _isRunning
                               ? IconButton(
                                   icon: const Icon(Icons.pause),
-                                  onPressed: pauseTimer,
+                                  onPressed: _isSoundingAlarm
+                                      ? null
+                                      : pauseTimer,
                                 )
                               : IconButton(
                                   icon: const Icon(Icons.play_arrow),
-                                  onPressed: startTimer,
+                                  onPressed: _isSoundingAlarm
+                                      ? null
+                                      : startTimer,
                                 ),
                           IconButton(
                             icon: const Icon(Icons.replay),
-                            onPressed: resetTimer,
+                            onPressed: _isSoundingAlarm ? null : resetTimer,
                           ),
                           IconButton(
                             icon: const Icon(Icons.dialpad),
-                            onPressed: gotoTimeEntry,
+                            onPressed: _isSoundingAlarm ? null : gotoTimeEntry,
                           ),
                         ],
                       ),
@@ -173,6 +182,12 @@ class _SingleTimerState extends State<SingleTimer> {
         ? InkWell(
             onTap: dismissAlarm,
             child: Card(
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                side: BorderSide(width: 2.0),
+              ),
               child: AnimatedMeshGradient(
                 colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
                 options: AnimatedMeshGradientOptions(),
@@ -180,6 +195,14 @@ class _SingleTimerState extends State<SingleTimer> {
               ),
             ),
           )
-        : Card(child: InnerUI);
+        : Card(
+            margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              side: BorderSide(width: 2.0),
+            ),
+            child: InnerUI,
+          );
   }
 }

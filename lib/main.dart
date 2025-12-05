@@ -17,7 +17,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: 'Trill',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         ),
         home: HomeStack(),
       ),

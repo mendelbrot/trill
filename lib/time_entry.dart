@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:trill/time_string.dart';
+import 'package:trill/time_display.dart';
 // import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+final ButtonStyle filledButtonStyle = FilledButton.styleFrom(
+  padding: EdgeInsets.zero,
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+);
+
+final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
+  padding: EdgeInsets.zero,
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+);
+
+final buttonTextStyle = TextStyle(fontSize: 20);
 
 class TimeEntry extends StatefulWidget {
   final Function onSubmit;
@@ -42,30 +54,9 @@ class _TimeEntryState extends State<TimeEntry> {
       ),
       body: Column(
         children: [
-          GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 1,
-            childAspectRatio: 4,
-            mainAxisSpacing: 10.0,
-            crossAxisSpacing: 10.0,
-            padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1.0),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: FittedBox(
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  child: Text(
-                    secondsToTimeString(_initialSeconds),
-                    style: TextStyle(fontFamily: 'monospace'),
-                  ),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TimeDisplay(seconds: _initialSeconds, absolute: true),
           ),
           GridView.count(
             shrinkWrap: true,
@@ -77,14 +68,8 @@ class _TimeEntryState extends State<TimeEntry> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+5s"),
+                style: outlinedButtonStyle,
+                child: Text("+5s", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 5;
@@ -92,14 +77,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+10s"),
+                style: outlinedButtonStyle,
+                child: Text("+10s", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 10;
@@ -107,14 +86,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+30s"),
+                style: outlinedButtonStyle,
+                child: Text("+30s", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 30;
@@ -122,14 +95,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+1m"),
+                style: outlinedButtonStyle,
+                child: Text("+1m", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 60;
@@ -137,14 +104,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+5m"),
+                style: outlinedButtonStyle,
+                child: Text("+5m", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 300;
@@ -152,14 +113,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+10m"),
+                style: outlinedButtonStyle,
+                child: Text("+10m", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 600;
@@ -167,14 +122,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+30m"),
+                style: outlinedButtonStyle,
+                child: Text("+30m", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 1800;
@@ -182,14 +131,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("+1h"),
+                style: outlinedButtonStyle,
+                child: Text("+1h", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds += 3600;
@@ -204,18 +147,12 @@ class _TimeEntryState extends State<TimeEntry> {
             childAspectRatio: 3.236,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
-            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            padding: EdgeInsets.all(10.0),
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("Zero"),
+              FilledButton(
+                style: filledButtonStyle,
+                child: Text("Zero", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
                     _initialSeconds = 0;
@@ -223,14 +160,8 @@ class _TimeEntryState extends State<TimeEntry> {
                 },
               ),
               OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  // side: BorderSide(color: Colors.blue, width: 1.5),
-                ),
-                child: Text("Set"),
+                style: filledButtonStyle,
+                child: Text("Set", style: buttonTextStyle),
                 onPressed: () {
                   Navigator.of(context).pop();
                   widget.onSubmit(_initialSeconds, true);

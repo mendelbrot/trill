@@ -10,11 +10,14 @@ class HomeStack extends StatelessWidget {
 
     return Scaffold(
       body: ReorderableListView(
-        header: ElevatedButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            appState.addNewTimer();
-          },
+        header: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: FilledButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              appState.addNewTimer();
+            },
+          ),
         ),
         onReorder: appState.onReorderCallback,
         children: [for (var timer in appState.timers) timer],

@@ -3,9 +3,11 @@ import 'package:trill/time_string.dart';
 
 class TimeDisplay extends StatelessWidget {
   final int _seconds;
+  final bool _absolute;
 
-  const TimeDisplay({Key? key, required int seconds})
+  const TimeDisplay({Key? key, int seconds = 0, bool absolute = false})
     : _seconds = seconds,
+      _absolute = absolute,
       super(key: key);
 
   @override
@@ -18,10 +20,10 @@ class TimeDisplay extends StatelessWidget {
           borderRadius: BorderRadius.circular(4.0),
         ),
         child: FittedBox(
-          alignment: Alignment.centerRight,
+          alignment: _absolute ? Alignment.center : Alignment.centerRight,
           fit: BoxFit.contain,
           child: Padding(
-            padding: const EdgeInsets.only(right: 2),
+            padding: _absolute ? EdgeInsets.zero : EdgeInsets.only(right: 2),
             child: Text(
               secondsToTimeString(_seconds),
               style: TextStyle(fontFamily: 'monospace'),
