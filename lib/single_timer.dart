@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:trill/app_state.dart';
+import 'package:trill/time_display.dart';
 import 'package:trill/time_entry.dart';
-import 'package:trill/time_string.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_mesh_gradient/animated_mesh_gradient.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -19,7 +19,7 @@ class _SingleTimerState extends State<SingleTimer> {
   int _initialSeconds = 0;
   int _seconds = 0;
   bool _isRunning = false;
-  bool _isFinished = false;
+  bool _isSoundingAlarm = false;
 
   final _player = AudioPlayer();
 
@@ -30,9 +30,19 @@ class _SingleTimerState extends State<SingleTimer> {
     super.dispose();
   }
 
-  void playAlarm() async {
+  void soundAlarm() async {
     await _player.setReleaseMode(ReleaseMode.loop);
     await _player.play(AssetSource('data-scanner.wav'));
+    setState(() {
+      _isSoundingAlarm = true;
+    });
+  }
+
+  void dismissAlarm() {
+    _player.stop();
+    setState(() {
+      _isSoundingAlarm = false;
+    });
   }
 
   Timer timerFactory() {
@@ -42,8 +52,7 @@ class _SingleTimerState extends State<SingleTimer> {
         setState(() {
           _seconds--;
           if (_seconds == 0) {
-            playAlarm();
-            _isFinished = true;
+            soundAlarm();
           }
         });
       });
@@ -104,73 +113,66 @@ class _SingleTimerState extends State<SingleTimer> {
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
     final theme = Theme.of(context);
-    final timeTextStyle = theme.textTheme.displayLarge!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-    final initialTimeTextStyle = theme.textTheme.displaySmall!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
 
-    Widget InnerUI = Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(secondsToTimeString(_seconds), style: timeTextStyle),
-          Row(
+    Widget InnerUI = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              OutlinedButton(
-                onPressed: gotoTimeEntry,
-                child: Text(
-                  secondsToTimeString(_initialSeconds),
-                  style: initialTimeTextStyle,
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                child: TimeDisplay(seconds: _seconds),
               ),
-              _isRunning
-                  ? IconButton(
-                      icon: const Icon(Icons.pause),
-                      color: theme.colorScheme.onPrimary,
-                      onPressed: () {
-                        pauseTimer();
-                      },
-                    )
-                  : IconButton(
-                      icon: const Icon(Icons.play_arrow),
-                      color: theme.colorScheme.onPrimary,
-                      onPressed: () {
-                        startTimer();
-                      },
+              Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(child: TimeDisplay(seconds: _initialSeconds)),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _isRunning
+                              ? IconButton(
+                                  icon: const Icon(Icons.pause),
+                                  onPressed: pauseTimer,
+                                )
+                              : IconButton(
+                                  icon: const Icon(Icons.play_arrow),
+                                  onPressed: startTimer,
+                                ),
+                          IconButton(
+                            icon: const Icon(Icons.replay),
+                            onPressed: resetTimer,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.dialpad),
+                            onPressed: gotoTimeEntry,
+                          ),
+                        ],
+                      ),
                     ),
-              IconButton(
-                icon: const Icon(Icons.replay),
-                color: theme.colorScheme.onPrimary,
-                onPressed: () {
-                  resetTimer();
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                color: theme.colorScheme.onPrimary,
-                onPressed: () {
-                  appState.removeTimer(widget.key!);
-                },
+                  ],
+                ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            appState.removeTimer(widget.key!);
+          },
+        ),
+      ],
     );
 
-    return _isFinished
+    return _isSoundingAlarm
         ? InkWell(
-            onTap: () {
-              _player.stop();
-              setState(() {
-                _isFinished = false;
-              });
-            },
+            onTap: dismissAlarm,
             child: Card(
-              color: theme.colorScheme.primary,
               child: AnimatedMeshGradient(
                 colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
                 options: AnimatedMeshGradientOptions(),
@@ -178,6 +180,6 @@ class _SingleTimerState extends State<SingleTimer> {
               ),
             ),
           )
-        : Card(color: theme.colorScheme.primary, child: InnerUI);
+        : Card(child: InnerUI);
   }
 }

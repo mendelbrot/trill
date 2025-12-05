@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trill/time_string.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+// import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class TimeEntry extends StatefulWidget {
   final Function onSubmit;
@@ -32,7 +32,7 @@ class _TimeEntryState extends State<TimeEntry> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Set the timer'),
+        title: Text(''),
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
@@ -53,25 +53,15 @@ class _TimeEntryState extends State<TimeEntry> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  // 2. Define the border
-                  border: Border.all(
-                    color: Colors.black, // The color of the border
-                    width: 1.0, // The thickness of the border
-                  ),
-                  // Optional: Add a rounded corner radius
+                  border: Border.all(color: Colors.black, width: 1.0),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: FittedBox(
                   alignment: Alignment.center,
-                  fit: BoxFit.contain, // or BoxFit.fill to stretch/distort
+                  fit: BoxFit.contain,
                   child: Text(
                     secondsToTimeString(_initialSeconds),
-                    style: TextStyle(
-                      fontFamily: 'monospace',
-                      // fontSize: 72.0,
-                      // fontWeight: FontWeight.bold,
-                      // color: Colors.blue,
-                    ),
+                    style: TextStyle(fontFamily: 'monospace'),
                   ),
                 ),
               ),
@@ -79,6 +69,7 @@ class _TimeEntryState extends State<TimeEntry> {
           ),
           GridView.count(
             shrinkWrap: true,
+            childAspectRatio: 1.618,
             crossAxisCount: 4,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
@@ -210,7 +201,7 @@ class _TimeEntryState extends State<TimeEntry> {
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: 2,
-            childAspectRatio: 2,
+            childAspectRatio: 3.236,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
