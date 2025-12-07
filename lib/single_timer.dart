@@ -32,7 +32,7 @@ class _SingleTimerState extends State<SingleTimer> {
 
   void soundAlarm() async {
     await _player.setReleaseMode(ReleaseMode.loop);
-    await _player.play(AssetSource('data-scanner.wav'));
+    await _player.play(AssetSource('e-flat-tibetan-singing-bowl.mp3'));
     setState(() {
       _isSoundingAlarm = true;
     });
@@ -90,11 +90,14 @@ class _SingleTimerState extends State<SingleTimer> {
   }
 
   void setTimer(int seconds, [bool start = false]) {
+    _timer?.cancel();
     setState(() {
+      _isRunning = false;
       _initialSeconds = seconds;
       _seconds = seconds;
       if (start) {
-        startTimer();
+        _timer = timerFactory();
+        _isRunning = true;
       }
     });
   }
@@ -186,7 +189,10 @@ class _SingleTimerState extends State<SingleTimer> {
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(width: 2.0),
+                side: BorderSide(
+                  width: 1.0,
+                  color: theme.colorScheme.onPrimary,
+                ),
               ),
               child: AnimatedMeshGradient(
                 colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
@@ -200,8 +206,9 @@ class _SingleTimerState extends State<SingleTimer> {
             clipBehavior: Clip.antiAlias,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
-              side: BorderSide(width: 2.0),
+              side: BorderSide(width: 1.0, color: theme.colorScheme.onPrimary),
             ),
+            color: theme.colorScheme.primaryContainer,
             child: InnerUI,
           );
   }

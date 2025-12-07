@@ -12,12 +12,15 @@ class TimeDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AspectRatio(
       aspectRatio: 4,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1.0),
+          border: Border.all(color: theme.colorScheme.tertiary, width: 1.0),
           borderRadius: BorderRadius.circular(4.0),
+          color: theme.colorScheme.tertiaryContainer,
         ),
         child: FittedBox(
           alignment: _absolute ? Alignment.center : Alignment.centerRight,
@@ -26,7 +29,10 @@ class TimeDisplay extends StatelessWidget {
             padding: _absolute ? EdgeInsets.zero : EdgeInsets.only(right: 2),
             child: Text(
               secondsToTimeString(_seconds),
-              style: TextStyle(fontFamily: 'monospace'),
+              style: TextStyle(
+                fontFamily: 'monospace',
+                // color: theme.colorScheme.onTertiary,
+              ),
             ),
           ),
         ),

@@ -9,10 +9,18 @@ class HomeStack extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: theme.colorScheme.inverseSurface,
       body: ReorderableListView(
         header: Padding(
           padding: const EdgeInsets.all(10.0),
           child: FilledButton(
+            style: FilledButton.styleFrom(
+              side: BorderSide(
+                color: theme.colorScheme.onPrimary,
+                width: 1.0,
+                style: BorderStyle.solid,
+              ),
+            ),
             child: const Icon(Icons.add),
             onPressed: () {
               appState.addNewTimer();

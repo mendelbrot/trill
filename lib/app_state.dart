@@ -5,7 +5,7 @@ class AppState extends ChangeNotifier {
   List<Widget> timers = [];
 
   void addNewTimer() {
-    timers.add(SingleTimer(key: UniqueKey()));
+    timers.insert(0, SingleTimer(key: UniqueKey()));
     notifyListeners();
   }
 

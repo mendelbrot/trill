@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trill/time_display.dart';
 // import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-final ButtonStyle filledButtonStyle = FilledButton.styleFrom(
-  padding: EdgeInsets.zero,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-);
-
-final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
-  padding: EdgeInsets.zero,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-);
-
-final buttonTextStyle = TextStyle(fontSize: 20);
-
 class TimeEntry extends StatefulWidget {
   final Function onSubmit;
   final int initialSeconds;
@@ -42,8 +30,24 @@ class _TimeEntryState extends State<TimeEntry> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final ButtonStyle filledButtonStyle = FilledButton.styleFrom(
+      backgroundColor: theme.colorScheme.primary,
+      padding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+    );
+
+    final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
+      backgroundColor: theme.colorScheme.surfaceBright,
+      padding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+    );
+
+    final buttonTextStyle = TextStyle(fontSize: 20);
+
     return Scaffold(
+      backgroundColor: theme.colorScheme.primaryContainer,
       appBar: AppBar(
+        backgroundColor: theme.colorScheme.primaryContainer,
         title: Text(''),
         leading: IconButton(
           icon: Icon(Icons.close),
@@ -150,8 +154,8 @@ class _TimeEntryState extends State<TimeEntry> {
             padding: EdgeInsets.all(10.0),
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              FilledButton(
-                style: filledButtonStyle,
+              OutlinedButton(
+                style: outlinedButtonStyle,
                 child: Text("Zero", style: buttonTextStyle),
                 onPressed: () {
                   setState(() {
@@ -159,7 +163,7 @@ class _TimeEntryState extends State<TimeEntry> {
                   });
                 },
               ),
-              OutlinedButton(
+              FilledButton(
                 style: filledButtonStyle,
                 child: Text("Set", style: buttonTextStyle),
                 onPressed: () {
