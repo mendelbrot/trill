@@ -4,11 +4,17 @@ import 'package:trill/time_string.dart';
 class TimeDisplay extends StatelessWidget {
   final int _seconds;
   final bool _absolute;
+  final bool _noScreenBg;
 
-  const TimeDisplay({Key? key, int seconds = 0, bool absolute = false})
-    : _seconds = seconds,
-      _absolute = absolute,
-      super(key: key);
+  const TimeDisplay({
+    Key? key,
+    int seconds = 0,
+    bool absolute = false,
+    bool noScreenBg = false,
+  }) : _seconds = seconds,
+       _absolute = absolute,
+       _noScreenBg = noScreenBg,
+       super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class TimeDisplay extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: theme.colorScheme.tertiary, width: 1.0),
           borderRadius: BorderRadius.circular(4.0),
-          color: theme.colorScheme.tertiaryContainer,
+          color: _noScreenBg ? null : theme.colorScheme.tertiaryContainer,
         ),
         child: FittedBox(
           alignment: _absolute ? Alignment.center : Alignment.centerRight,

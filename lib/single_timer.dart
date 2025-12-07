@@ -126,7 +126,10 @@ class _SingleTimerState extends State<SingleTimer> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
-                child: TimeDisplay(seconds: _seconds),
+                child: TimeDisplay(
+                  seconds: _seconds,
+                  noScreenBg: _isSoundingAlarm,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 10),
@@ -136,6 +139,7 @@ class _SingleTimerState extends State<SingleTimer> {
                       child: TimeDisplay(
                         seconds: _initialSeconds,
                         absolute: true,
+                        noScreenBg: _isSoundingAlarm,
                       ),
                     ),
                     Expanded(
