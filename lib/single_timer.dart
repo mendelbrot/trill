@@ -32,7 +32,7 @@ class _SingleTimerState extends State<SingleTimer> {
 
   void soundAlarm() async {
     await _player.setReleaseMode(ReleaseMode.loop);
-    await _player.play(AssetSource('e-flat-tibetan-singing-bowl.mp3'));
+    await _player.play(AssetSource('soft-piano-72454.mp3'));
     setState(() {
       _isSoundingAlarm = true;
     });
