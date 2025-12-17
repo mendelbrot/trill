@@ -21,11 +21,14 @@ class _SingleTimerState extends State<SingleTimer> {
   bool _isRunning = false;
   bool _isSoundingAlarm = false;
 
+  final TextEditingController _timerNameController = TextEditingController();
+
   final _player = AudioPlayer();
 
   @override
   void dispose() {
     _timer?.cancel();
+    _timerNameController.dispose();
     _player.dispose();
     super.dispose();
   }
@@ -124,6 +127,13 @@ class _SingleTimerState extends State<SingleTimer> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: _timerNameController,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
                 child: TimeDisplay(
