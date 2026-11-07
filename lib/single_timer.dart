@@ -141,7 +141,7 @@ class _SingleTimerState extends State<SingleTimer> {
               // Nudged into the card's top/right padding; the tap area and
               // hover highlight move with it.
               Transform.translate(
-                offset: const Offset(5, -5),
+                offset: const Offset(0, -0),
                 child: IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
@@ -171,7 +171,7 @@ class _SingleTimerState extends State<SingleTimer> {
                   // Nudged into the card's bottom/right padding; tap areas
                   // and hover highlights move with it.
                   child: Transform.translate(
-                    offset: const Offset(5, 5),
+                    offset: const Offset(0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
