@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:animated_mesh_gradient/animated_mesh_gradient.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+/// Width (logical px) at which the timer card is laid out before being
+/// uniformly scaled to fit the available width.
+const double kTimerDesignWidth = 400;
+
 class SingleTimer extends StatefulWidget {
   const SingleTimer({super.key});
 
@@ -120,82 +124,86 @@ class _SingleTimerState extends State<SingleTimer> {
     var appState = context.watch<AppState>();
     final theme = Theme.of(context);
 
-    Widget InnerUI = Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    Widget InnerUI = Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
+              Expanded(
                 child: TextField(
                   controller: _timerNameController,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
-                child: TimeDisplay(
-                  seconds: _seconds,
-                  noScreenBg: _isSoundingAlarm,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, bottom: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TimeDisplay(
-                        seconds: _initialSeconds,
-                        absolute: true,
-                        noScreenBg: _isSoundingAlarm,
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          _isRunning
-                              ? IconButton(
-                                  icon: const Icon(Icons.pause),
-                                  onPressed: _isSoundingAlarm
-                                      ? null
-                                      : pauseTimer,
-                                )
-                              : IconButton(
-                                  icon: const Icon(Icons.play_arrow),
-                                  onPressed: _isSoundingAlarm
-                                      ? null
-                                      : startTimer,
-                                ),
-                          IconButton(
-                            icon: const Icon(Icons.replay),
-                            onPressed: _isSoundingAlarm ? null : resetTimer,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.dialpad),
-                            onPressed: _isSoundingAlarm ? null : gotoTimeEntry,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              // Nudged into the card's top/right padding; the tap area and
+              // hover highlight move with it.
+              Transform.translate(
+                offset: const Offset(5, -5),
+                child: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    appState.removeTimer(widget.key!);
+                  },
                 ),
               ),
             ],
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            appState.removeTimer(widget.key!);
-          },
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: TimeDisplay(seconds: _seconds, noScreenBg: _isSoundingAlarm),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TimeDisplay(
+                    seconds: _initialSeconds,
+                    absolute: true,
+                    noScreenBg: _isSoundingAlarm,
+                  ),
+                ),
+                Expanded(
+                  // Nudged into the card's bottom/right padding; tap areas
+                  // and hover highlights move with it.
+                  child: Transform.translate(
+                    offset: const Offset(5, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _isRunning
+                            ? IconButton(
+                                icon: const Icon(Icons.pause),
+                                onPressed: _isSoundingAlarm ? null : pauseTimer,
+                              )
+                            : IconButton(
+                                icon: const Icon(Icons.play_arrow),
+                                onPressed: _isSoundingAlarm ? null : startTimer,
+                              ),
+                        IconButton(
+                          icon: const Icon(Icons.replay),
+                          onPressed: _isSoundingAlarm ? null : resetTimer,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.dialpad),
+                          onPressed: _isSoundingAlarm ? null : gotoTimeEntry,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
 
-    return _isSoundingAlarm
+    Widget card = _isSoundingAlarm
         ? InkWell(
             onTap: dismissAlarm,
             child: Card(
@@ -225,5 +233,34 @@ class _SingleTimerState extends State<SingleTimer> {
             color: theme.colorScheme.primaryContainer,
             child: InnerUI,
           );
+
+    // Lay the card out at a fixed design width, then scale it uniformly to
+    // the available width so every element keeps the same relative size.
+    // The SizedBox forces full width, since ReorderableListView hands its
+    // items loose constraints (which would stop fitWidth from scaling up).
+    // Long-pressing anywhere on the card starts a reorder drag.
+    return ReorderableDelayedDragStartListener(
+      index: appState.timers.indexWhere((t) => t.key == widget.key),
+      child: SizedBox(
+        width: double.infinity,
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: SizedBox(
+            width: kTimerDesignWidth,
+            // Larger icons (30px vs default 24px) with the default 8px
+            // padding: 46px button, padded to a 48px tap target.
+            child: IconButtonTheme(
+              data: IconButtonThemeData(
+                style: IconButton.styleFrom(
+                  iconSize: 30,
+                  padding: const EdgeInsets.all(8),
+                ),
+              ),
+              child: card,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
