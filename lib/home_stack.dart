@@ -12,6 +12,7 @@ class HomeStack extends StatelessWidget {
       child: Scaffold(
         backgroundColor: theme.colorScheme.inverseSurface,
         body: ReorderableListView(
+          buildDefaultDragHandles: false,
           header: Padding(
             padding: const EdgeInsets.all(10.0),
             child: FilledButton(
